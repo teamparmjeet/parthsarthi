@@ -212,27 +212,27 @@ export default function Page() {
       const response = await axios.post("/api/projects/create", updatedFormData);
       if (response.status === 200) {
         toast.success("Project successfully created!");
-        // setFormData({
-        //   category: "",
-        //   price: "",
-        //   title: "",
-        //   slug: "",
-        //   content: "",
-        //   location: "",
-        //   projectSize: "",
-        //   bhk: "",
-        //   isFeatured: "",
-        //   propertyType: "",
-        //   possessionStatus: "",
-        //   AvailablePlot: "",
-        //   map: "",
-        //   image: "",
-        //   gallery: [],
-        //   sitePlan: "",
-        //   pdf: "",
-        //   seoTitle: "",
-        //   seoDescription: ""
-        // }); // Reset form
+        setFormData({
+          category: "",
+          price: "",
+          title: "",
+          slug: "",
+          content: "",
+          location: "",
+          projectSize: "",
+          bhk: "",
+          isFeatured: "",
+          propertyType: "",
+          possessionStatus: "",
+          AvailablePlot: "",
+          map: "",
+          image: "",
+          gallery: [],
+          sitePlan: "",
+          pdf: "",
+          seoTitle: "",
+          seoDescription: ""
+        }); // Reset form
       } else {
         toast.error("Failed to create project! Unexpected status code.");
       }

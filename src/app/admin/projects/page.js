@@ -171,7 +171,7 @@ export default function Page() {
                                         <Link className="font-semibold text-gray-900 text-sm whitespace-nowrap" href={`/projects/${item.slug}`}>{item.title}</Link>
                                         <div className="flex mt-1 opacity-0 group-hover:opacity-100">
                                             <Link className="text-[11px] text-sky-900 pr-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={`/projects/${item.slug}`}>View</Link>
-                                            {/* <Link className="text-[11px] text-sky-600 px-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={`/admin/projects/edit/${item._id}`}>Edit</Link> */}
+                                            <Link className="text-[11px] text-sky-600 px-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={`/admin/projects/edit/${item._id}`}>Edit</Link>
                                             <button
                                                 className="text-[11px] text-red-600 px-2 leading-none pt-[1px] pb-[2px]"
                                                 onClick={() => handleDelete(item._id)}

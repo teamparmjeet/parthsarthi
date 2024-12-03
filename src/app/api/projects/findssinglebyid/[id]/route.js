@@ -1,18 +1,19 @@
 import dbConnect from "@/lib/dbConnect";
 import ProjectModel from "@/model/ProjectModel";
 
-export async function PATCH(req) {
-
+export async function GET(req, context) {
     await dbConnect();
 
     try {
-        const data = await req.json();
 
-        const project = await ProjectModel.findById(data.id);
-        if (!project) {
+        const id = context.params.id;
+
+        const data = await ProjectModel.findOne({ _id: id });
+
+        if (!data) {
             return Response.json(
                 {
-                    message: "Project Not Found From this ID!",
+                    message: "Data Not Found From this ID",
                     success: false
                 },
                 {
@@ -21,39 +22,28 @@ export async function PATCH(req) {
             )
         }
 
-        const updateProject = await ProjectModel.updateOne(
-            {
-                _id: data.id
-            },
-            {
-
-                $set: data
-            }
-        )
-
         return Response.json(
             {
-                message: "Project Updated Successfully!",
-                success: true
+                message: "ID got it",
+                success: true,
+                data
             },
             {
                 status: 200
             }
         )
 
-
     } catch (error) {
         console.log(error);
+
         return Response.json(
             {
-                message: error,
+                message: "Have an Error to Get Data",
                 success: false
             },
             {
-                status: 500
+                status: 400
             }
         )
     }
-
-
 }
