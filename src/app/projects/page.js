@@ -181,7 +181,7 @@ export default function Projects() {
                                     keyid={project.slug} />
                             ))
                         ) : (
-                            <div className="text-center text-gray-500 col-span-full">No projects found.</div>
+                            <div className="text-center text-gray-500 col-span-full">Please Wait...</div>
                         )}
                     </div>
 
