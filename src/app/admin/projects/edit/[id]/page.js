@@ -211,13 +211,13 @@ export default function Page({ params }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     try {
       let imageUrl = formData.image; // Preserve existing image URL if available
       let galleryUrls = formData.gallery || []; // Preserve existing gallery URLs
       let sitePlanUrl = formData.sitePlan; // Preserve existing site plan URL
-      let pdfUrl = formData.pdf; // Preserve existing PDF URL
-  
+
+
       // Upload single image if it's a new file
       if (formData.image instanceof File) {
         const formDataImage = new FormData();
@@ -227,11 +227,11 @@ export default function Page({ params }) {
         });
         imageUrl = uploadResponse.data.file.secure_url;
       }
-  
+
       // Upload new gallery images only
       if (formData.gallery) {
         const newGalleryFiles = formData.gallery.filter((item) => item instanceof File);
-  
+
         if (newGalleryFiles.length > 0) {
           const uploadPromises = newGalleryFiles.map((file) => {
             const formDataGallery = new FormData();
@@ -240,16 +240,16 @@ export default function Page({ params }) {
               headers: { "Content-Type": "multipart/form-data" },
             });
           });
-  
+
           // Resolve all uploads and collect URLs for new files
           const uploadResponses = await Promise.all(uploadPromises);
           const newGalleryUrls = uploadResponses.map((res) => res.data.file.secure_url);
-  
+
           // Combine existing URLs and new URLs
           galleryUrls = [...galleryUrls.filter((item) => !(item instanceof File)), ...newGalleryUrls];
         }
       }
-  
+
       // Upload site plan if it's a new file
       if (formData.sitePlan instanceof File) {
         const formDataSitePlan = new FormData();
@@ -259,28 +259,18 @@ export default function Page({ params }) {
         });
         sitePlanUrl = sitePlanResponse.data.file.secure_url;
       }
-  
-      // Upload PDF if it's a new file
-      if (formData.pdf instanceof File) {
-        const formDataPdf = new FormData();
-        formDataPdf.append("file", formData.pdf);
-        const pdfResponse = await axios.post("/api/upload", formDataPdf, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        pdfUrl = pdfResponse.data.file.secure_url;
-      }
-  
+
       // Submit updated data
       const updatedFormData = {
         ...formData,
         image: imageUrl,
         gallery: galleryUrls, // Array of updated gallery URLs
         sitePlan: sitePlanUrl, // Updated site plan URL
-        pdf: pdfUrl, // Updated PDF URL
+
       };
-  
+
       const response = await axios.patch("/api/projects/update", { id: id, ...updatedFormData });
-  
+
       if (response.status === 200) {
         toast.success("Project successfully updated!");
       } else {
@@ -293,7 +283,7 @@ export default function Page({ params }) {
       setLoading(false);
     }
   };
-  
+
 
 
 
@@ -412,6 +402,23 @@ export default function Page({ params }) {
                     placeholder="Map (use Embed code)"
                     className="block w-full px-2 py-2 text-gray-500 bg-white border border-gray-200 placeholder:text-gray-400 focus:border-[#29234b] focus:outline-none focus:ring-[#29234b] sm:text-sm"
                   />
+                </div>
+
+                <div className="col-span-12">
+
+                  <div className="col-span-12">
+                    <label htmlFor="pdf" className="block text-[12px] text-gray-700">
+                      Brochure (use Link)
+                    </label>
+                    <input
+                      type="text"
+                      name="pdf"
+                      value={formData.pdf}
+                      onChange={handleChange}
+                      placeholder="Pdf (use Link)"
+                      className="block w-full px-2 py-2 text-gray-500 bg-white border border-gray-200 placeholder:text-gray-400 focus:border-[#29234b] focus:outline-none focus:ring-[#29234b] sm:text-sm"
+                    />
+                  </div>
                 </div>
 
 
@@ -569,41 +576,6 @@ export default function Page({ params }) {
                 </div>
 
 
-                <div className="col-span-12">
-                  <label htmlFor="pdf" className="block text-[12px] text-gray-700">
-                    Brochure
-                  </label>
-
-                  {formData.pdf ? (
-                    <div className="relative border rounded p-4 bg-gray-50">
-                      <p className="text-sm text-gray-800 truncate">{formData.pdf.name}</p>
-                      <button
-                        type="button"
-                        onClick={() => setFormData((prev) => ({ ...prev, pdf: null }))}
-                        className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded opacity-75 hover:opacity-100"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="border border-dashed border-gray-300 p-4 rounded text-center">
-                      <input
-                        type="file"
-                        id="pdf"
-                        name="pdf"
-                        accept="application/pdf"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="pdf"
-                        className="cursor-pointer text-sm text-blue-600 hover:underline"
-                      >
-                        Click to upload a Brochure (PDF)
-                      </label>
-                    </div>
-                  )}
-                </div>
 
 
 
