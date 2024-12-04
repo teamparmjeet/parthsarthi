@@ -17,6 +17,23 @@ export default function Footer() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+    const [data, setdata] = useState([]);
+
+    useEffect(() => {
+        const alldata = async () => {
+            try {
+                const response = await axios.get('/api/pages');
+                setdata(response.data.data);
+            } catch (error) {
+                console.error('Error fetching data data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        alldata();
+    }, []);
+
     useEffect(() => {
         const isFormFilled =
             formData.email
@@ -124,12 +141,19 @@ export default function Footer() {
                                             <Link className={`py-[8px] flex text-white  px-[12px] rounded-lg text-sm  hover:bg-[#d3e7ff37]`} href="/blog">
                                                 Blogs
                                             </Link>
-                                            <Link className={`py-[8px] flex text-white  px-[12px] rounded-lg text-sm  hover:bg-[#d3e7ff37]`} href="/">
+                                            {/* <Link className={`py-[8px] flex text-white  px-[12px] rounded-lg text-sm  hover:bg-[#d3e7ff37]`} href="/">
                                                 Privacy Policy
                                             </Link>
                                             <Link className={`py-[8px] flex text-white  px-[12px] rounded-lg text-sm  hover:bg-[#d3e7ff37]`} href="/">
                                                 Terms And Conditions
-                                            </Link>
+                                            </Link> */}
+
+                                            {data.map((page) => (
+                                                <Link key={page._id} className={`py-[8px] flex text-white  px-[12px] rounded-lg text-sm  hover:bg-[#d3e7ff37]`} href={page.slug}>
+                                                    {page.title}
+                                                </Link>
+                                            ))}
+
 
                                         </li>
                                     </ul>
