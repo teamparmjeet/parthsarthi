@@ -131,21 +131,23 @@ export default function Sidebar({ onToggleSidebar }) {
                 </li>
               </Link>
               <Link href="/admin/blogs/add">
-              <li
-                className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/blogs/add") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
-                  }`}
-              >
-                <Rocket size={18} />
-                Add Blogs
-              </li>
+                <li
+                  className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/blogs/add") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                >
+                  <Rocket size={18} />
+                  Add Blogs
+                </li>
               </Link>
-              <li
-                className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
-                  }`}
-              >
-                <Rocket size={18} />
-                Projects Leads
-              </li>
+              <Link href="/admin/projectleads">
+                <li
+                  className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/projectleads") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                >
+                  <Rocket size={18} />
+                  Projects Leads
+                </li>
+              </Link>
               <Link href="/admin/reviews">
                 <li
                   className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/reviews") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
@@ -174,7 +176,7 @@ export default function Sidebar({ onToggleSidebar }) {
                   Subscribe
                 </li>
               </Link>
-           
+
 
             </ul>
 

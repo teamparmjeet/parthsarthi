@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-const ContactForm = () => {
+const ContactForm = ({project}) => {
   const [formData, setFormData] = useState({
+    project:project,
     fullName: "",
     email: "",
     phone: "",
@@ -34,7 +35,7 @@ const ContactForm = () => {
 
     try {
       // Submit form data to the API
-      const response = await axios.post('/api/contact/create', formData);
+      const response = await axios.post('/api/Lead/create', formData);
       if (response.data.success) {
         toast.success("Contact Request Send Successfully")
         setFormData({

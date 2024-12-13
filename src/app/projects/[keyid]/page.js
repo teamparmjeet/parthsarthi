@@ -121,7 +121,7 @@ export default function SingleProject({ params }) {
                                 <h4 className="text-md font-bold text-center mb-4 uppercase">
                                     Get Best Offer on this Project
                                 </h4>
-                                <ContactForm />
+                                <ContactForm  project={project.slug}/>
                             </div>
                         </div>
                     </div>
