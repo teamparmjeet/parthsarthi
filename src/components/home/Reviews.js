@@ -14,7 +14,7 @@ export default function Reviews() {
 
     const fetchreviews = async () => {
         try {
-            const response = await axios.get('/api/reviews/get');
+            const response = await axios.get('/api/reviews/get/reviews');
             setReviews(response.data.data);
             setLoading(false);
         } catch (error) {

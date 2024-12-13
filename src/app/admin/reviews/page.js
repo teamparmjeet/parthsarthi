@@ -18,7 +18,7 @@ export default function Reviews() {
     useEffect(() => {
         const allReviews = async () => {
             try {
-                const response = await axios.get('/api/reviews/get');
+                const response = await axios.get('/api/reviews/get/reviews');
                 setReviews(response.data.data);
             } catch (error) {
                 console.error('Error fetching reviews data:', error);

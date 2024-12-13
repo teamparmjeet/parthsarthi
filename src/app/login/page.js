@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { signIn,useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 export default function Login() {
     const [formData, setFormData] = useState({
@@ -118,9 +118,7 @@ export default function Login() {
                         {loading ? 'Signing In...' : 'Sign In'}
                     </button>
 
-                    <Link href="/page/auth/signup" className='block text-center text-sm text-gray-700 hover:text-gray-900 mt-4'>
-                    Forgot Your Password? <span className='text-2 font-semibold'>Forgot</span>
-                    </Link>
+
                 </form>
             </div>
         </div>

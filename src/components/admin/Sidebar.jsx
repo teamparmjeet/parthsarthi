@@ -174,14 +174,7 @@ export default function Sidebar({ onToggleSidebar }) {
                   Subscribe
                 </li>
               </Link>
-              <Link href="/main/page/staff">
-                <li
-                  className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/main/page/staff") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
-                    }`}>
-                  <Users size={18} />
-                  Users
-                </li>
-              </Link>
+           
 
             </ul>
 

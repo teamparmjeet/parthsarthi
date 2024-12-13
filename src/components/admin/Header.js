@@ -154,7 +154,7 @@ export default function AdminHeader() {
 
                             <div className='flex items-center justify-end gap-1 lg:gap-1'>
 
-                                <div className='sm:block hidden'><Smallbtn icon={Settings} href="/" /></div>
+                                <div className='sm:block hidden'><Smallbtn icon={Settings} href="/admin/profile" /></div>
                                 <div onClick={toggleNotification}>
                                     <Smallbtn icon={Bell} href="javascript:void(0)" />
                                 </div>
@@ -168,7 +168,7 @@ export default function AdminHeader() {
                                     </div>
                                 )}
                                 <div className='sm:block hidden'>
-                                    <Link href="/main/page/addquery">
+                                    <Link href="/admin/projects/add">
                                         <Btn1 title="New Property" />
                                     </Link>
                                 </div>
@@ -181,7 +181,7 @@ export default function AdminHeader() {
                                     </div>
                                     {isProfileOpen && (
                                         <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-50">
-                                            <Link href="/main/profile">
+                                            <Link href="/admin/profile">
                                                 <div className='flex items-center px-4 py-2 hover:bg-gray-100'>
                                                     <UserCircle size={18} className='mr-2' />
                                                     <span>Profile</span>

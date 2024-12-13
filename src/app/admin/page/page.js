@@ -51,7 +51,7 @@ export default function Page() {
     const handleDelete = async (_id) => {
         try {
             // Perform DELETE request to the same API
-            const response = await axios.delete(`/api/pages?_id=${_id}`);
+            const response = await axios.delete(`/api/pages/delete?_id=${_id}`);
 
             if (response.status === 200) {
                 alert('Page deleted successfully.');
@@ -170,7 +170,7 @@ export default function Page() {
                                     <td className="px-4 py-2 group">
                                         <Link className="font-semibold text-gray-900 text-sm whitespace-nowrap" href={`/admin/page/edit/${item._id}`}>{item.title}</Link>
                                         <div className="flex mt-1 opacity-0 group-hover:opacity-100">
-                                            <Link className="text-[11px] text-sky-900 pr-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={'#'}>View</Link>
+                                            <Link className="text-[11px] text-sky-900 pr-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={`/${item.slug}`}>View</Link>
                                             <Link className="text-[11px] text-sky-600 px-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={`/admin/page/edit/${item._id}`}>Edit</Link>
                                             <button
                                                 className="text-[11px] text-red-600 px-2 leading-none pt-[1px] pb-[2px]"

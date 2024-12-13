@@ -18,7 +18,7 @@ export default function Page() {
     useEffect(() => {
         const alldata = async () => {
             try {
-                const response = await axios.get('/api/blogs');
+                const response = await axios.get('/api/blogs/fetchall/blog');
                 setdata(response.data.data);
             } catch (error) {
                 console.error('Error fetching data data:', error);
@@ -170,7 +170,7 @@ export default function Page() {
                                     <td className="px-4 py-2 group">
                                         <Link className="font-semibold text-gray-900 text-sm whitespace-nowrap" href={`/admin/blogs/edit/${item._id}`}>{item.title}</Link>
                                         <div className="flex mt-1 opacity-0 group-hover:opacity-100">
-                                            <Link className="text-[11px] text-sky-900 pr-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={'#'}>View</Link>
+                                            <Link className="text-[11px] text-sky-900 pr-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={`/blog/${item.slug}`}>View</Link>
                                             <Link className="text-[11px] text-sky-600 px-2 border-r leading-none pt-[1px] pb-[2px] border-r-neutral-500" href={`/admin/blogs/edit/${item._id}`}>Edit</Link>
                                             <button
                                                 className="text-[11px] text-red-600 px-2 leading-none pt-[1px] pb-[2px]"

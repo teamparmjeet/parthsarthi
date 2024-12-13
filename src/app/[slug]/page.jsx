@@ -68,10 +68,9 @@ export default function Page({ params }) {
 
 
                     {data.content && (
-                        <div
-                            className="prose max-w-none"
-                            dangerouslySetInnerHTML={{ __html: data.content }}
-                        />
+                        <div className=''
+                            dangerouslySetInnerHTML={{ __html: data.content }}>
+                        </div>
                     )}
 
 

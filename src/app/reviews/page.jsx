@@ -10,7 +10,7 @@ export default function ReviewsArchivePage() {
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.get("/api/reviews/get");
+            const response = await axios.get("/api/reviews/get/reviews");
             setReviews(response.data.data);
         } catch (error) {
             setError("Failed to load reviews. Please try again later.");
