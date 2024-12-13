@@ -53,7 +53,7 @@ export default function Header() {
         },
         {
             title: "Career",
-            href: "/",
+            href: "/career",
             badge: "Hiring"
         },
         {
