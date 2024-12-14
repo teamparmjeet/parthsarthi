@@ -1,22 +1,18 @@
 import dbConnect from "@/lib/dbConnect";
-import SubscribeModel from "@/model/subscribeModel";
+import BannerModel from "@/model/Banner";
 
-export async function POST(req) {
-
+export async function GET() {
     await dbConnect();
 
     try {
 
-        const { email, mobile } = await req.json();
-
-        const SubscribeCreate = await SubscribeModel.create(
-            { email, mobile }
-        )
+        const data = await BannerModel.find({ defaultdata: "Banner" });
 
         return Response.json(
             {
-                message: "Subscribetion Created Successfully!",
-                success: true
+                message: "All Data Fetched!",
+                success: true,
+                data
             },
             {
                 status: 200
@@ -27,7 +23,7 @@ export async function POST(req) {
         console.log(error);
         return Response.json(
             {
-                message: "Subscribetion Not Created!",
+                message: "Have an error to fetch data",
                 success: false
             },
             {
@@ -35,5 +31,4 @@ export async function POST(req) {
             }
         )
     }
-
 }

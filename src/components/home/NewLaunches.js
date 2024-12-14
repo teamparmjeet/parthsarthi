@@ -79,6 +79,7 @@ export default function NewLaunches() {
                                     <div key={item.slug || index} className="px-2">
                                         <New
                                             keyid={item.slug}
+                                            logo={item.logo}
                                             imageUrl={item.image}
                                             status="New Launch"
                                             title={item.title}
@@ -93,6 +94,7 @@ export default function NewLaunches() {
                                     <New
                                         imageUrl="/placeholder.jpg" // Provide a default placeholder image
                                         status="New"
+                                      
                                         title="Modern Apartment"
                                         location="Jaipur, Rajasthan"
                                         size="1800"

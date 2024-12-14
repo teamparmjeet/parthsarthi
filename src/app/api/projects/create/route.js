@@ -6,10 +6,10 @@ export async function POST(req) {
     await dbConnect();
 
     try {
-        const { category, price, title, slug, content, location, projectSize, bhk, isFeatured, propertyType, possessionStatus, AvailablePlot, map, image, gallery, sitePlan, pdf, seoTitle, seoDescription } = await req.json();
+        const { category, price, title, slug, content, location, projectSize, bhk, isFeatured, propertyType, possessionStatus, AvailablePlot, map,logo, image, gallery, sitePlan, pdf, seoTitle, seoDescription } = await req.json();
 
 
-        const dataUp = await ProjectModel.create({ category, price, title, slug, content, location, projectSize, bhk, isFeatured, propertyType, possessionStatus, AvailablePlot, map, image, gallery, sitePlan, pdf, seoTitle, seoDescription });
+        const dataUp = await ProjectModel.create({ category, price, title, slug, content, location, projectSize, bhk, isFeatured, propertyType, possessionStatus, AvailablePlot, map,logo, image, gallery, sitePlan, pdf, seoTitle, seoDescription });
 
 
 

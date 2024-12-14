@@ -6,20 +6,20 @@ import Image from "next/image";
 import { Home, Maximize2 } from "lucide-react";
 
 
-export default function FeaturedCard({project}) {
+export default function FeaturedCard({ project }) {
 
 
     return (
         <div className="bg-gradient-to-br from-[#fff5e4] to-[#fff5e4] rounded-2xl md:p-2 p-4">
             <div className="grid md:grid-cols-5 grid-cols-1 md:gap-2 gap-5">
                 <div className="col-span-2 md:order-1 order-2 space-y-5 md:p-4 flex flex-col items-start justify-center">
-                    <div className="bg-white rounded-md inline-block p-3  shadow">
-                        <Image src={logo} alt="ParthSarthi Logos" className="max-h-[50px] w-auto" />
+                    <div className="bg-white p-3 rounded-md inline-block  shadow">
+                        <Image src={project.logo} width={60} height={60} alt="ParthSarthi Logos" className=" " />
                     </div>
                     <div>
                         <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
                         <p className="text-gray-900 text-opacity-50 text-sm flex items-center">
-                           {project.location}</p>
+                            {project.location}</p>
                     </div>
 
                     <div className="flex justify-between lg:flex-row flex-col lg:items-center lg:space-y-0 space-y-2 bg-slate-600 bg-opacity-40 p-4 rounded-lg w-full">

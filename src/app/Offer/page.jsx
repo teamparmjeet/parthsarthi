@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import Breadcrumb from '@/components/Breadcrumb';
 import { Search, X } from 'lucide-react';
 import New from '@/components/card/new';
+import BannerVideo from "@/components/home/BannerVideo";
 // import parthCr from "@/public/Parth-Crown-1-1024x1024.jpg";
 import axios from "axios";
-export default function Projects() {
+export default function Offer() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
@@ -96,6 +97,9 @@ export default function Projects() {
 
     return (
         <>
+            <div>
+                <BannerVideo />
+            </div>
             <section className="py-2 bg-[#e6ecfc]">
                 <div className="container max-w-[90%] mx-auto">
                     <Breadcrumb customLabels={{ projects: 'Projects' }} />

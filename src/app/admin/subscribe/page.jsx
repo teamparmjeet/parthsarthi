@@ -129,7 +129,7 @@ export default function Page() {
                         <option value="oldest">Oldest</option>
                     </select>
 
-                  
+
                 </div>
             </div>
 
@@ -139,6 +139,7 @@ export default function Page() {
                     <thead className="bg-[#29234b] text-white uppercase">
                         <tr>
                             <th scope="col" className="px-4 font-medium capitalize py-2"> Email</th>
+                            <th scope="col" className="px-4 font-medium capitalize py-2"> Mobile</th>
 
                             <th scope="col" className="px-4 font-medium capitalize py-2">Date</th>
                         </tr>
@@ -172,6 +173,9 @@ export default function Page() {
                                     </td>
 
 
+                                    <td className="px-4 py-2 text-[12px]">
+                                        {item.mobile}
+                                    </td>
                                     <td className="px-4 py-2 text-[12px]">
                                         {new Date(item.createdAt).toLocaleDateString()}
                                     </td>

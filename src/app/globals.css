@@ -60,3 +60,32 @@ body {
   outline: none;
   background: transparent;
 }
+
+
+
+
+.animated-gradient {
+  height: 24rem; /* h-96 in Tailwind is 24rem */
+  border-radius: 0.5rem; /* rounded-lg in Tailwind is 0.5rem */
+  background: linear-gradient(to bottom right, #CC9B18, white);
+  background-size: 200% 200%; /* Expands the gradient for smooth animation */
+  animation: gradient-animation 4s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  0% {
+    background-position: 0% 50%;
+  }
+}

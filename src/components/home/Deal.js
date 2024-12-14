@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import axios from "axios";
+
 export default function Deal() {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -8,32 +10,47 @@ export default function Deal() {
     minutes: 0,
     seconds: 0,
   });
+  const [dealEndDate, setDealEndDate] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchDeal = async () => {
+    try {
+      const response = await axios.get("/api/Deal/fetchall/all");
+      const fetchedEndDate = new Date(response.data.data[0].Deal);
+      setDealEndDate(fetchedEndDate);
+    } catch (error) {
+      console.error("Error fetching deal:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const dealEndDate = new Date("2024-12-25T00:00:00"); // Moved inside useEffect
+    fetchDeal();
+  }, []);
 
-    const updateCountdown = () => {
-      const now = new Date();
-      const difference = dealEndDate - now;
+  useEffect(() => {
+    if (dealEndDate) {
+      const updateCountdown = () => {
+        const now = new Date();
+        const difference = dealEndDate - now;
 
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((difference / 1000 / 60) % 60);
-        const seconds = Math.floor((difference / 1000) % 60);
+        if (difference > 0) {
+          const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+          const minutes = Math.floor((difference / 1000 / 60) % 60);
+          const seconds = Math.floor((difference / 1000) % 60);
 
-        setTimeLeft({
-          days,
-          hours,
-          minutes,
-          seconds,
-        });
-      }
-    };
+          setTimeLeft({ days, hours, minutes, seconds });
+        } else {
+          setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        }
+      };
 
-    const timer = setInterval(updateCountdown, 1000);
-    return () => clearInterval(timer);
-  }, []); // Empty dependency array, only runs on mount/unmount
+      const timer = setInterval(updateCountdown, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [dealEndDate]);
 
   return (
     <section className="py-4">
@@ -72,10 +89,10 @@ export default function Deal() {
           </div>
 
           <div className="absolute -bottom-4 w-full">
-            <Link href="/projects">
-            <button className="bg-red-600 text-white text-sm font-bold py-2 px-6 rounded-full shadow-lg hover:bg-red-700 transition-all ease-in-out duration-200">
-              Claim Your Deal Now
-            </button>
+            <Link href="/Offer">
+              <button className="bg-red-600 text-white text-sm font-bold py-2 px-6 rounded-full shadow-lg hover:bg-red-700 transition-all ease-in-out duration-200">
+                Claim Your Deal Now
+              </button>
             </Link>
           </div>
         </div>

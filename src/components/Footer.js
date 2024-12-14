@@ -7,11 +7,13 @@ import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 export default function Footer() {
     const [formData, setFormData] = useState({
         email: "",
+        mobile: ""
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -36,7 +38,8 @@ export default function Footer() {
 
     useEffect(() => {
         const isFormFilled =
-            formData.email
+            formData.mobile
+        formData.email
 
         setIsSubmitEnabled(isFormFilled);
     }, [formData]);
@@ -61,7 +64,8 @@ export default function Footer() {
                 setSuccess("Subscribection successfully !");
                 toast.success("Subscribection successfully!")
                 setFormData({
-                    email: ""
+                    email: "",
+                    mobile: ""
                 });
             }
         } catch (err) {
@@ -71,6 +75,15 @@ export default function Footer() {
             setLoading(false);
         }
     };
+
+    const handlePhoneChange = (mobile) => {
+        setFormData({
+            ...formData,
+            mobile
+        });
+    };
+
+
     return (
         <>
             <section className="py-10"><Toaster />
@@ -94,8 +107,13 @@ export default function Footer() {
                             </div>
 
                             <h4 className="font-semibold text-lg text-white">Address</h4>
-                            <p className=" text-sm text-white">2nd Floor, 2/4, Chitrakoot, Gandhi Path, Vaishali Nagar, Jaipur
+                            <p className="text-sm text-white">
+                                Parth Sarthi Tower, 2nd Floor, 2/4, Chitrakoot, Gandhi Path, Vaishali Nagar, Jaipur
                             </p>
+                            <p className="text-sm text-white ">
+                                <span className="text-yellow-300">Landmark:</span> Near Mall of Jaipur
+                            </p>
+
 
                         </div>
                         <div className="col-span-1 py-4 flex items-center text-center   flex-col justify-center">
@@ -192,15 +210,26 @@ export default function Footer() {
                                     <input
                                         type="email"
                                         name="email"
-                                        className="flex-grow py-3 text-sm px-4 text-gray-700 placeholder-gray-400 focus:outline-none     rounded-l-md"
+                                        className="flex-grow py- text-sm px-4 text-gray-700 placeholder-gray-400 focus:outline-none     rounded-l-md"
                                         placeholder="Email ID"
                                         value={formData.email}
                                         onChange={handleChange}
                                     />
+
                                     {/* Suffix Mail Icon */}
                                     <div className="p-2">
                                         <Mail className="text-gray-500" />
                                     </div>
+                                </div>
+                                <div className="flex items-center my-2 bg-white border border-gray-300 rounded-md shadow-sm">
+                                    <PhoneInput
+                                        country={"in"}
+                                        value={formData.mobile}
+                                        onChange={handlePhoneChange}
+
+                                         className="flex-grow  text-sm text-gray-700 placeholder-gray-400 focus:outline-none     rounded-l-md"
+                                        required
+                                    />
                                 </div>
 
                                 <button

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import Logo from '@/public/annother-parth.svg';
-import { ChevronDown, Headset, Menu, X, Mail, Smartphone, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
+import { ChevronDown, MessageCircle, Headset, Menu, X, Mail, Smartphone, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import TopBar from "./TopBar";
 import { useSession } from "next-auth/react";
@@ -142,9 +142,41 @@ export default function Header() {
                                 ))}
                             </ul>
 
-                            <Link style={{ background: 'linear-gradient(to right, #DAB221, #B07C0A)' }} className={`ms-3 text-white bg-[#2d2849] flex justify-center items-center h-[40px] w-[40px] rounded-full text-sm`} href="/contact-us">
+                            <div style={{ background: 'linear-gradient(to right, #DAB221, #B07C0A)' }} className={`ms-3 group relative text-white bg-[#2d2849] flex justify-center items-center h-[40px] w-[40px] rounded-full text-sm`}>
                                 <Headset />
-                            </Link>
+
+                                <div className="absolute hidden group-hover:block top-10 z-20  backdrop-blur-sm text-[#CC9B18] px-2 border rounded-md shadow-md">
+                                    <ul className=" divide-y">
+                                        {/* Email Link */}
+                                        <li>
+                                            <Link
+                                                href="mailto:info@parthsarthibuilder.com"
+                                                title="Send Email"
+                                                className="flex items-center underline gap-x-2 p-1 my-1 rounded-lg hover:bg-gray-100 transition duration-200"
+                                            >
+                                                <Mail color="#CC9B18" size={18} />
+                                                Email
+                                            </Link>
+                                        </li>
+
+                                        {/* WhatsApp Link */}
+                                        <li>
+                                            <Link
+                                                href="https://wa.me/+919024965965"
+                                                passHref
+                                                title="Message on WhatsApp"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex underline items-center gap-x-2 p-1 my-1 rounded-lg hover:bg-gray-100 transition duration-200"
+                                            >
+                                                <MessageCircle color="#6cb049" size={18} />
+                                                WhatsApp
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
 
                             {/* Mobile Menu Button */}
                             <button onClick={toggleMobileMenu} className="lg:hidden ms-3 flex items-center">

@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import SubscribeModel from "@/model/subscribeModel";
+import DealModel from "@/model/Deal";
 
 export async function POST(req) {
 
@@ -7,15 +7,15 @@ export async function POST(req) {
 
     try {
 
-        const { email, mobile } = await req.json();
+        const { Deal } = await req.json();
 
-        const SubscribeCreate = await SubscribeModel.create(
-            { email, mobile }
+        const DealCreate = await DealModel.create(
+            { Deal }
         )
 
         return Response.json(
             {
-                message: "Subscribetion Created Successfully!",
+                message: "Deal Created Successfully!",
                 success: true
             },
             {
@@ -27,7 +27,7 @@ export async function POST(req) {
         console.log(error);
         return Response.json(
             {
-                message: "Subscribetion Not Created!",
+                message: "Deal Not Created!",
                 success: false
             },
             {

@@ -29,6 +29,7 @@ export default function Page() {
     possessionStatus: "",
     AvailablePlot: "",
     map: "",
+    logo: "",
     image: "",
     gallery: "",
     sitePlan: "",
@@ -95,7 +96,11 @@ export default function Page() {
     if (e.target.name === 'image') {
       // For single image
       setFormData((prev) => ({ ...prev, image: files[0] }));
-    } else if (e.target.name === 'gallery') {
+    } else if (e.target.name === 'logo') {
+      // For single logo
+      setFormData((prev) => ({ ...prev, logo: files[0] }));
+    }
+    else if (e.target.name === 'gallery') {
       // For multiple images
       setFormData((prev) => ({
         ...prev,
@@ -151,9 +156,10 @@ export default function Page() {
 
     try {
       let imageUrl = formData.image;
+      let logoUrl = formData.logo;
       let galleryUrls = [];
       let sitePlanUrl = "";
-    
+
 
       // Handle single image upload
       if (formData.image) {
@@ -164,6 +170,16 @@ export default function Page() {
         });
         imageUrl = uploadResponse.data.file.secure_url;
       }
+
+      if (formData.logo) {
+        const formDatalogo = new FormData();
+        formDatalogo.append("file", formData.logo);
+        const uploadResponse = await axios.post("/api/upload", formDatalogo, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        logoUrl = uploadResponse.data.file.secure_url;
+      }
+
 
       // Handle multiple gallery images upload concurrently
       if (formData.gallery.length > 0) {
@@ -195,9 +211,10 @@ export default function Page() {
       const updatedFormData = {
         ...formData,
         image: imageUrl,
+        logo: logoUrl,
         gallery: galleryUrls, // Array of uploaded URLs
         sitePlan: sitePlanUrl, // Add the site plan URL
-        
+
       };
 
       const response = await axios.post("/api/projects/create", updatedFormData);
@@ -217,6 +234,7 @@ export default function Page() {
           possessionStatus: "",
           AvailablePlot: "",
           map: "",
+          logo: "",
           image: "",
           gallery: [],
           sitePlan: "",
@@ -380,6 +398,53 @@ export default function Page() {
                   </label>
                   <ReactQuill theme="snow" className=" h-44 mb-10" value={formData.content} onChange={(value) => handleEditorChange('content', value)} />
                 </div>
+
+                <div className="col-span-12">
+                  <label htmlFor="logo" className="block text-[12px] text-gray-700">
+                    Logo Image
+                  </label>
+
+                  {formData.logo ? (
+                    <div className="relative group">
+                      <Image
+                        src={URL.createObjectURL(formData.logo)}
+                        alt="Feature Preview"
+                        height={100}
+                        width={100}
+                        className="w-full h-40 object-cover rounded border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData((prev) => ({ ...prev, logo: "" }))}
+                        className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded opacity-75 group-hover:opacity-100"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="border border-dashed border-gray-300 p-4 rounded text-center">
+                      <input
+                        type="file"
+                        id="logo"
+                        name="logo"
+                        accept="logo/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="logo"
+                        className="cursor-pointer text-sm text-blue-600 hover:underline"
+                      >
+                        Click to upload an logo
+                      </label>
+
+                    </div>
+                  )}
+                </div>
+
+
+
+
                 {/* Feature Image */}
                 <div className="col-span-12">
                   <label htmlFor="image" className="block text-[12px] text-gray-700">

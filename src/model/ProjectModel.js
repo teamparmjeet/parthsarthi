@@ -8,24 +8,24 @@ const ProjectSchema = new Schema(
             default: "Not-Provided"
         },
 
-        price:{
+        price: {
             type: String,
             required: true,
         },
-        
+
         title: {
             type: String,
-            required: true, 
+            required: true,
             trim: true
         },
         slug: {
             type: String,
-            required: true, 
+            required: true,
             unique: true,
             trim: true
         },
         content: {
-            type: String, 
+            type: String,
             required: true
         },
         location: {
@@ -44,7 +44,7 @@ const ProjectSchema = new Schema(
             default: false
         },
         propertyType: {
-            type: String 
+            type: String
         },
         possessionStatus: {
             type: String
@@ -54,6 +54,10 @@ const ProjectSchema = new Schema(
         },
         map: {
             type: String
+        },
+        logo: {
+            type: String,
+            default: null
         },
         image: {
             type: String,
@@ -68,15 +72,15 @@ const ProjectSchema = new Schema(
             default: null
         },
         pdf: {
-            type: String, 
+            type: String,
             default: null
         },
         seoTitle: {
-            type: String, 
+            type: String,
             trim: true
         },
         seoDescription: {
-            type: String, 
+            type: String,
             trim: true
         },
 
@@ -89,6 +93,6 @@ const ProjectSchema = new Schema(
     { timestamps: true }
 );
 
-const ProjectModel = mongoose.models.project4 || mongoose.model("project4", ProjectSchema);
+const ProjectModel = mongoose.models.project5 || mongoose.model("project5", ProjectSchema);
 
 export default ProjectModel;

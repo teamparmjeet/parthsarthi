@@ -80,6 +80,18 @@ export default function Sidebar({ onToggleSidebar }) {
                   Dashboard
                 </li>
               </Link>
+
+
+              <Link href="/admin/banner">
+                <li
+                  className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/banner") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                >
+                  <NotebookText size={18} />
+                  Banner                </li>
+              </Link>
+
+
               <Link href="/admin/page">
                 <li
                   className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/page") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
@@ -177,6 +189,14 @@ export default function Sidebar({ onToggleSidebar }) {
                 </li>
               </Link>
 
+              <Link href="/admin/Offer">
+                <li
+                  className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/Offer") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                >
+                  <NotebookText size={18} />
+                  Offer                </li>
+              </Link>
 
             </ul>
 
