@@ -12,7 +12,8 @@ import axios from "axios";
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+
     const { data: session, status } = useSession();
     const [category, setCategory] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,15 +41,22 @@ export default function Header() {
 
     const menuItems = [
         {
-            title: "About us",
-            href: "/about-us"
+            title: "About Us",
+            href: "#",
+            submenu: [
+                { title: "About Us", href: "/about-us" },
+                { title: "Profile", href: "/profile" },
+                { title: "Vision", href: "/vision" },
+                { title: "Management and leadership ", href: "/manage" }
+            ]
         },
+
         {
             title: "Our Projects",
             href: "#",
             submenu: category.map((item) => ({
-                title: item.title,  // Assuming each category object has a `name` field
-                href: `/projects` // Assuming `slug` is used for dynamic URLs
+                title: item.title,
+                href: `/projects`
             }))
         },
         {
@@ -65,15 +73,30 @@ export default function Header() {
             href: "/contact-us"
         }
     ];
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setIsMobileMenuOpen(false);
+            }
+        };
 
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
     const isActiveLink = (href) => pathname === href;
 
-    const toggleSubMenu = () => {
-        setIsSubMenuOpen((prev) => !prev);
-    };
+    // const toggleSubMenu = () => {
+    //     setIsSubMenuOpen((prev) => !prev);
+    // };
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [openSubMenuIndex, setOpenSubMenuIndex] = useState(null); // For tracking the open submenu index
 
     const toggleMobileMenu = () => {
-        setIsMobileMenuOpen((prev) => !prev);
+        setIsMobileMenuOpen((prev) => !prev); // Toggle mobile menu visibility
+    };
+
+    const toggleSubMenu = (index) => {
+        setOpenSubMenuIndex((prevIndex) => (prevIndex === index ? null : index)); // Only one submenu open at a time
     };
 
     return (
@@ -107,30 +130,67 @@ export default function Header() {
                             <Link href="/"><Image alt='' src={Logo} className="md:max-w-[90px] max-w-[50px]" /></Link>
                         </div>
                         <div className="flex items-center">
+
                             {/* Desktop Menu */}
-                            <ul className="hidden lg:flex items-center">
+                            <ul
+                                className={`fixed lg:static top-0 left-0 lg:flex lg:items-center lg:w-auto bg-white lg:bg-transparent z-50  transition-transform duration-300 ${isMobileMenuOpen
+                                    ? "transform translate-x-0 w-80 h-screen flex flex-col justify-start p-6"
+                                    : "transform -translate-x-full lg:translate-x-0 lg:h-auto"
+                                    }`}
+                            >
+                                {/* Close Button for Mobile Menu */}
+                                {isMobileMenuOpen && (
+                                    <button
+                                        onClick={toggleMobileMenu}
+                                        className="absolute top-4 right-6 text-gray-600 text-2xl lg:hidden"
+                                    >
+                                        <X size={30} />
+                                    </button>
+                                )}
+
                                 {menuItems.map((link, index) => (
-                                    <li className="relative ms-3" key={index} onClick={link.submenu && toggleSubMenu}>
-                                        <Link className={`py-[11px] flex justify-center items-center px-[26px] rounded-full text-sm ${isActiveLink(link.href) ? "bg-[#2d2849] text-white" : "bg-gray-50 hover:bg-[#f2e1b561]"}`} href={link.href}>
+                                    <li
+                                        key={index}
+                                        className={`relative mt-5 border-b lg:border-none ${isMobileMenuOpen ? "py-2" : "ms-3"
+                                            }`}
+                                        onClick={() => link.submenu && toggleSubMenu(index)}
+                                    >
+                                        <Link
+                                            className={`block py-[11px] px-[26px] rounded-full text-sm ${openSubMenuIndex === index
+                                                ? "bg-[#2d2849] text-white"
+                                                : "bg-gray-50 hover:bg-[#f2e1b561]"
+                                                }`}
+                                            href={link.href}
+                                        >
                                             {link.title}
-                                            {link.badge && (
-                                                <span className="text-[8px] py-1 absolute top-[-5px] end-0 font-semibold leading-none bg-red-500 text-white px-2 rounded-full">
-                                                    {link.badge}
-                                                </span>
-                                            )}
                                             {link.submenu && (
-                                                <span className="ml-2 transition-transform duration-300">
-                                                    <ChevronDown size={15} className={`${isSubMenuOpen && 'rotate-180'}`} />
+                                                <span className="ml-2 float-right lg:inline transition-transform duration-300">
+                                                    <ChevronDown
+                                                        size={15}
+                                                        className={`${openSubMenuIndex === index ? "rotate-180" : ""}`}
+                                                    />
                                                 </span>
                                             )}
                                         </Link>
                                         {link.submenu && (
-                                            <div className={`absolute min-w-max left-0 bg-white shadow-lg rounded-2xl z-50 p-2 transition-opacity duration-300 ${isSubMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                                                <div className="absolute top-[-10px] left-1/4 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-white"></div>
-                                                <ul className="space-y-1">
+                                            <div
+                                                className={`overflow-hidden transition-[max-height] duration-300 ${openSubMenuIndex === index ? "max-h-screen" : "max-h-0"
+                                                    } lg:absolute lg:min-w-max lg:bg-white lg:shadow-lg lg:rounded-2xl lg:z-50 lg:p-2 lg:transition-opacity lg:duration-300 ${openSubMenuIndex === index
+                                                        ? "lg:opacity-100"
+                                                        : "lg:opacity-0 lg:pointer-events-none"
+                                                    }`}
+                                            >
+                                                <ul
+                                                    className={`${isMobileMenuOpen ? "pl-4 pr-2 pb-2" : "space-y-1 lg:space-y-0"
+                                                        }`}
+                                                >
                                                     {link.submenu.map((subLink, subIndex) => (
                                                         <li key={subIndex}>
-                                                            <Link className="py-[10px] block px-[24px] rounded-full text-sm hover:bg-[#f2e1b561]" href={subLink.href}>
+                                                            <Link
+                                                                className={`block py-[10px] px-[24px] rounded-full text-sm hover:bg-[#f2e1b561] ${isMobileMenuOpen ? "text-gray-600" : ""
+                                                                    }`}
+                                                                href={subLink.href}
+                                                            >
                                                                 {subLink.title}
                                                             </Link>
                                                         </li>
@@ -186,38 +246,6 @@ export default function Header() {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
-                <div className={`fixed z-50 top-0 left-0 w-64 h-full bg-white shadow-lg transition-transform transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
-                    <div className="flex justify-between items-center p-4">
-                        <h2 className="text-lg font-bold">Menu</h2>
-                        <button onClick={toggleMobileMenu}><X size={20} /></button>
-                    </div>
-                    <ul className="flex flex-col">
-                        {menuItems.map((link, index) => (
-                            <li key={index}>
-                                <div onClick={link.submenu ? toggleSubMenu : undefined} className="relative py-3 px-4 flex justify-between items-center cursor-pointer">
-                                    <Link className={`text-sm ${isActiveLink(link.href) ? "bg-[#2d2849] text-white" : "text-gray-800"}`} href={link.href}>
-                                        {link.title}
-                                    </Link>
-                                    {link.submenu && (
-                                        <ChevronDown size={15} className={`${isSubMenuOpen ? 'rotate-180' : ''}`} />
-                                    )}
-                                </div>
-                                {link.submenu && isSubMenuOpen && (
-                                    <ul className="ml-4">
-                                        {link.submenu.map((subLink, subIndex) => (
-                                            <li key={subIndex}>
-                                                <Link className="py-2 block text-sm hover:bg-[#f2e1b561]" href={subLink.href}>
-                                                    {subLink.title}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             </nav>
         </header>
     );

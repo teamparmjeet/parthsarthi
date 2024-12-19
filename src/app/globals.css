@@ -15,8 +15,8 @@
 }
 
 body {
-  
-   
+
+
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -25,22 +25,26 @@ body {
     text-wrap: balance;
   }
 }
-.gradientText{
+
+.gradientText {
   background: -webkit-linear-gradient(315deg, #ffd334 0%, #ffae00 74%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
+
 /* .slider-arrow{
   background-color: #fff;
   box-shadow: 0 1px 4px 0 rgba(0, 106, 194, .2);
 } */
 
-.image-gallery-left-nav .image-gallery-svg, .image-gallery-right-nav .image-gallery-svg {
-  height: 49px!important;
-  width: 30px!important;
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 49px !important;
+  width: 30px !important;
 }
 
-.slick-prev, .slick-next {
+.slick-prev,
+.slick-next {
   font-size: 0;
   line-height: 0;
   position: absolute;
@@ -55,8 +59,8 @@ body {
   cursor: pointer;
   /* color: black!important; */
   /* border: 1px solid black!important; */
-  border-radius: 50%!important;
-  background-color: #352d60!important;
+  border-radius: 50% !important;
+  background-color: #352d60 !important;
   outline: none;
   background: transparent;
 }
@@ -65,10 +69,13 @@ body {
 
 
 .animated-gradient {
-  height: 24rem; /* h-96 in Tailwind is 24rem */
-  border-radius: 0.5rem; /* rounded-lg in Tailwind is 0.5rem */
+  height: 24rem;
+  /* h-96 in Tailwind is 24rem */
+  border-radius: 0.5rem;
+  /* rounded-lg in Tailwind is 0.5rem */
   background: linear-gradient(to bottom right, #CC9B18, white);
-  background-size: 200% 200%; /* Expands the gradient for smooth animation */
+  background-size: 200% 200%;
+  /* Expands the gradient for smooth animation */
   animation: gradient-animation 4s ease infinite;
 }
 
@@ -76,16 +83,29 @@ body {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   0% {
     background-position: 0% 50%;
   }
+}
+
+
+.bgprofile {
+  background-image: url("../public/img2.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
