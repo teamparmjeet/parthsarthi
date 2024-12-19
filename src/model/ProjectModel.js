@@ -32,12 +32,18 @@ const ProjectSchema = new Schema(
             type: String,
             required: true
         },
-        projectSize: {
-            type: String
-        },
-        bhk: {
-            type: String
-        },
+        projectSize: [
+            {
+                size: { type: String, required: true },
+                image: { type: [String], required: true }
+            }
+        ],
+        bhk: [
+            {
+                bhk: { type: String, required: true },
+                image: { type: [String], required: true }
+            }
+        ],
         isFeatured: {
             type: Boolean,
             required: true,
@@ -93,6 +99,6 @@ const ProjectSchema = new Schema(
     { timestamps: true }
 );
 
-const ProjectModel = mongoose.models.project5 || mongoose.model("project5", ProjectSchema);
+const ProjectModel = mongoose.models.project6 || mongoose.model("project6", ProjectSchema);
 
 export default ProjectModel;

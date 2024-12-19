@@ -18,7 +18,7 @@ export default function Home() {
       <Feature />
       <AboutComponent />
       <NewLaunches />
-      <Category /> 
+      <Category />
       <Partners />
       <Reviews />
       <BlogsSection />

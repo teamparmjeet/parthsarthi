@@ -27,13 +27,19 @@ export default function FeaturedCard({ project }) {
                             <div className="flex items-center me-2 justify-center bg-gradient-to-r   from-[#DAB221] to-[#B07C0A] rounded-full h-[25px] w-[25px]">
                                 <Maximize2 size={15} color="white" className="" />
                             </div>
-                            <p className="text-white text-sm flex font-semibold items-center">{project.projectSize}  Sq. Ft</p>
+                            <p className="text-white text-sm flex font-semibold items-center">
+                                {project.projectSize.length > 0 && `${project.projectSize[0].size} Sq. Ft`}
+                            </p>
+
                         </p>
                         <p className="flex items-center">
                             <div className="flex items-center me-2 justify-center bg-gradient-to-r   from-[#DAB221] to-[#B07C0A] rounded-full h-[25px] w-[25px]">
                                 <Home size={15} color="white" className="" />
                             </div>
-                            <p className="text-white text-sm flex font-semibold items-center">{project.bhk} BHK {project.propertyType}</p>
+                            <p className="text-white text-sm flex font-semibold items-center">
+                                {project.bhk.length > 0 && `${project.bhk[0].bhk} BHK, `}{project.propertyType}
+                            </p>
+
                         </p>
                     </div>
 

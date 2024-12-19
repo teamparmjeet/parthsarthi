@@ -84,7 +84,7 @@ export default function NewLaunches() {
                                             status="New Launch"
                                             title={item.title}
                                             location={item.location}
-                                            size={item.price}
+                                            size={item.projectSize}
                                             bhk={item.bhk}
                                         />
                                     </div>

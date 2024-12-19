@@ -23,8 +23,9 @@ export default function Page({ params }) {
     slug: "",
     content: "",
     location: "",
-    projectSize: "",
-    bhk: "",
+
+    projectSize: [{ size: "", image: [] }],
+    bhk: [{ bhk: "", image: [] }],
     isFeatured: "false",
     propertyType: "",
     possessionStatus: "",
@@ -74,8 +75,14 @@ export default function Page({ params }) {
           slug: res.data.data.slug,
           content: res.data.data.content,
           location: res.data.data.location,
-          projectSize: res.data.data.projectSize,
-          bhk: res.data.data.bhk,
+          projectSize: res.data.data.projectSize.map(item => ({
+            size: item.size,
+            image: item.image
+          })),
+          bhk: res.data.data.bhk.map(item => ({
+            bhk: item.bhk,
+            image: item.image
+          })),
           isFeatured: res.data.data.isFeatured,
           propertyType: res.data.data.propertyType,
           possessionStatus: res.data.data.possessionStatus,
@@ -100,7 +107,6 @@ export default function Page({ params }) {
 
     fetchData();
   }, [id]);
-
 
 
 
@@ -307,6 +313,105 @@ export default function Page({ params }) {
 
 
 
+
+  // Handle change for bhk input
+  const handleBHKChange = (e, index) => {
+    const updatedBHK = [...formData.bhk];
+    updatedBHK[index].bhk = e.target.value;
+    setFormData({ ...formData, bhk: updatedBHK });
+  };
+
+  const handleProjectSizeChange = (e, index) => {
+    const updatedProjectSize = [...formData.projectSize];
+    updatedProjectSize[index].size = e.target.value;
+    setFormData({ ...formData, projectSize: updatedProjectSize });
+  };
+
+  // Add a new bhk entry
+  const addBHK = () => {
+    setFormData({
+      ...formData,
+      bhk: [...formData.bhk, { bhk: '', image: [] }],
+    });
+  };
+
+  // Add a new projectSize entry
+  const addProjectSize = () => {
+    setFormData({
+      ...formData,
+      projectSize: [...formData.projectSize, { size: '', image: [] }],
+    });
+  };
+
+  // Remove a specific bhk entry
+  const removeBHK = (index) => {
+    const updatedBHK = formData.bhk.filter((_, i) => i !== index);
+    setFormData({ ...formData, bhk: updatedBHK });
+  };
+
+  // Remove a specific projectSize entry
+  const removeProjectSize = (index) => {
+    const updatedProjectSize = formData.projectSize.filter((_, i) => i !== index);
+    setFormData({ ...formData, projectSize: updatedProjectSize });
+  };
+
+  const addImageToBHK = (index) => {
+    setFormData((prevFormData) => {
+      const updatedBhk = [...prevFormData.bhk];
+
+      const newImages = prevFormData.gallery.filter(
+        (image) => !updatedBhk[index].image.includes(image)
+      );
+
+      updatedBhk[index].image = [...updatedBhk[index].image, ...newImages];
+
+      return { ...prevFormData, bhk: updatedBhk };
+    });
+  };
+
+
+  const addImageToProjectSize = (index) => {
+    setFormData((prevFormData) => {
+      const updatedProjectSize = [...prevFormData.projectSize];
+      const newImages = prevFormData.gallery.filter(
+        (image) => !updatedProjectSize[index].image.includes(image)
+      );
+      updatedProjectSize[index].image = [...updatedProjectSize[index].image, ...newImages];
+
+      return { ...prevFormData, projectSize: updatedProjectSize };
+    });
+  };
+
+
+  const removeImage = (bhkIndex, imgIndex) => {
+    setFormData((prevFormData) => {
+      const updatedBhk = prevFormData.bhk.map((bhkItem, index) => {
+        if (index === bhkIndex) {
+          return {
+            ...bhkItem,
+            image: bhkItem.image.filter((_, i) => i !== imgIndex),
+          };
+        }
+        return bhkItem;
+      });
+      return { ...prevFormData, bhk: updatedBhk };
+    });
+  };
+  const removeProjectSizeImage = (sizeIndex, imgIndex) => {
+    setFormData((prevFormData) => {
+      const updatedProjectSize = prevFormData.projectSize.map((sizeItem, index) => {
+        if (index === sizeIndex) {
+          return {
+            ...sizeItem,
+            image: sizeItem.image.filter((_, i) => i !== imgIndex),
+          };
+        }
+        return sizeItem;
+      });
+      return { ...prevFormData, projectSize: updatedProjectSize };
+    });
+  };
+  
 
   const handleEditorChange = (field, value) => {
     setFormData((prevFormData) => ({
@@ -658,20 +763,163 @@ export default function Page({ params }) {
             </div>
             <div className="lg:col-span-1 gap-4 flex flex-col">
 
+              <div>
+                {formData.bhk.map((bhkItem, index) => (
+                  <div key={`bhk-${index}`} className="sm:col-span-6 col-span-12">
+                    {/* Input for BHK */}
+                    <label htmlFor={`bhk-${index}`} className="block text-[12px] text-gray-700">
+                      BHK
+                    </label>
+                    <input
+                      type="number"
+                      name={`bhk-${index}`}
+                      value={bhkItem.bhk}
+                      onChange={(e) => handleBHKChange(e, index)}
+                      placeholder="Enter BHK"
+                      className="block w-full px-2 py-2 text-gray-500 bg-white border border-gray-200 placeholder:text-gray-400 focus:border-[#29234b] focus:outline-none focus:ring-[#29234b] sm:text-sm"
+                    />
 
-              <div className="sm:col-span-6 col-span-12">
-                <label htmlFor="bhk" className="block text-[12px] text-gray-700">
-                  BHK
-                </label>
-                <input
-                  type="number"
-                  name="bhk"
-                  value={formData.bhk}
-                  onChange={handleChange}
-                  placeholder="Enter Bhk"
-                  className="block w-full px-2 py-2 text-gray-500 bg-white border border-gray-200 placeholder:text-gray-400 focus:border-[#29234b] focus:outline-none focus:ring-[#29234b] sm:text-sm"
-                />
+                    {/* Display existing images */}
+                    <div className="mt-2">
+                      <p className="text-[12px] text-gray-700">Images:</p>
+                      {bhkItem.image.length > 0 ? (
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          {bhkItem.image.map((img, imgIndex) => (
+                            <div key={imgIndex} className="relative">
+                              <Image
+                                src={img}
+                                alt={`BHK Image ${imgIndex + 1}`}
+                                height={100}
+                                width={100}
+                                className="w-full h-auto rounded border"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeImage(index, imgIndex)}
+                                className="absolute top-0 right-0 text-red-500 bg-white rounded-full p-1 text-xs"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[12px] text-gray-500">No images added yet.</p>
+                      )}
+                    </div>
+
+                    {/* Button to add images */}
+                    <button
+                      type="button"
+                      onClick={() => addImageToBHK(index)}
+                      className="text-blue-500 text-xs mt-2"
+                    >
+                      Add Images from Gallery
+                    </button>
+
+                    {/* Button to remove BHK */}
+                    {formData.bhk.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeBHK(index)}
+                        className="text-red-500 text-xs mt-2"
+                      >
+                        Remove BHK
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                {/* Button to add more BHK */}
+                <button
+                  type="button"
+                  onClick={addBHK}
+                  className="text-blue-500 text-xs mt-2"
+                >
+                  Add More BHK
+                </button>
               </div>
+
+              <div>
+                {formData.projectSize.map((projectSizeItem, index) => (
+                  <div key={`projectSize-${index}`} className="sm:col-span-6 col-span-12">
+                    {/* Input for Project Size */}
+                    <label htmlFor={`projectSize-${index}`} className="block text-[12px] text-gray-700">
+                      Project Size
+                    </label>
+                    <input
+                      type="number"
+                      name={`projectSize-${index}`}
+                      value={projectSizeItem.size}
+                      onChange={(e) => handleProjectSizeChange(e, index)}
+                      placeholder="Enter project size"
+                      className="block w-full px-2 py-2 text-gray-500 bg-white border border-gray-200 placeholder:text-gray-400 focus:border-[#29234b] focus:outline-none focus:ring-[#29234b] sm:text-sm"
+                    />
+
+                    {/* Display existing images */}
+                    <div className="mt-2">
+                      <p className="text-[12px] text-gray-700">Images:</p>
+                      {projectSizeItem.image.length > 0 ? (
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          {projectSizeItem.image.map((img, imgIndex) => (
+                            <div key={imgIndex} className="relative">
+                              <Image
+                                src={img}
+                                height={100}
+                                width={100}
+                                alt={`Project Size Image ${imgIndex + 1}`}
+                                className="w-full h-auto rounded border"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeProjectSizeImage(index, imgIndex)}
+                                className="absolute top-0 right-0 text-red-500 bg-white rounded-full p-1 text-xs"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[12px] text-gray-500">No images added yet.</p>
+                      )}
+                    </div>
+
+                    {/* Button to add images */}
+                    <button
+                      type="button"
+                      onClick={() => addImageToProjectSize(index)}
+                      className="text-blue-500 text-xs mt-2"
+                    >
+                      Add Images from Gallery
+                    </button>
+
+                    {/* Button to remove Project Size */}
+                    {formData.projectSize.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeProjectSize(index)}
+                        className="text-red-500 text-xs mt-2"
+                      >
+                        Remove Project Size
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                {/* Button to add more Project Sizes */}
+                <button
+                  type="button"
+                  onClick={addProjectSize}
+                  className="text-blue-500 text-xs mt-2"
+                >
+                  Add More Project Size
+                </button>
+              </div>
+
+
+
+
 
               <div className="col-span-12">
                 <label htmlFor="possessionStatus" className="block text-[12px] text-gray-700">
@@ -755,19 +1003,6 @@ export default function Page({ params }) {
                 />
               </div>
 
-              <div className="sm:col-span-6 col-span-12">
-                <label htmlFor="projectSize" className="block text-[12px] text-gray-700">
-                  Project Size
-                </label>
-                <input
-                  type="number"
-                  name="projectSize"
-                  value={formData.projectSize}
-                  onChange={handleChange}
-                  placeholder="Enter Project Size"
-                  className="block w-full px-2 py-2 text-gray-500 bg-white border border-gray-200 placeholder:text-gray-400 focus:border-[#29234b] focus:outline-none focus:ring-[#29234b] sm:text-sm"
-                />
-              </div>
 
 
               <div className="col-span-12">

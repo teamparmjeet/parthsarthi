@@ -71,8 +71,12 @@ const Tabs = ({ project }) => {
                                 <div className="flex items-center mb-2 justify-center bg-gradient-to-r from-[#DAB221] to-[#B07C0A] rounded-full h-[55px] w-[55px]" >
                                     <PencilRuler size={25} className="text-white" />
                                 </div>
-                                <p className="text-[14px]  text-gray-500  my-1">Area Size                                </p>
-                                <p className="mb-0 font-bold">{project.projectSize}</p>
+                                <p className="text-[14px]  text-gray-500  my-1">Area Size</p>
+                                <div className="mb-0 font-bold flex gap-2">
+                                    {project.projectSize.map((item) => (
+                                        <div key={item.id}>{item.size} Sqft /</div>
+                                    ))}
+                                </div>
 
                             </div>
                             <div className="col-span-1 bg-[#fff5e4] rounded-md py-6 flex flex-col items-center justify-center">
@@ -80,7 +84,9 @@ const Tabs = ({ project }) => {
                                     <Building size={25} className="text-white" />
                                 </div>
                                 <p className="text-[14px]  text-gray-500  my-1">BHK</p>
-                                <p className="mb-0 font-bold">{project.bhk}</p>
+                                <div className="mb-0 font-bold flex gap-2">{project.bhk.map((item) => (
+                                    <div key={item.id}>{item.bhk} BHK /</div>
+                                ))}</div>
 
                             </div>
 
@@ -126,13 +132,13 @@ const Tabs = ({ project }) => {
                 {/* Tab 3 Content */}
                 {activeTab === 2 && (
                     <div>
-                      <Image 
-                      src={project.sitePlan}
-                      width={500}
-                      height={500}
-                      alt=''
-                      />
-                      
+                        <Image
+                            src={project.sitePlan}
+                            width={500}
+                            height={500}
+                            alt=''
+                        />
+
                     </div>
                 )}
 
@@ -142,8 +148,12 @@ const Tabs = ({ project }) => {
                         <h2 className="text-xl font-bold">{project.title}</h2>
                         <p className="text-gray-500">Price: ₹{project.price}</p>
                         <p className="text-gray-500">Property Type: {project.propertyType === "1" ? "Apartment" : "Other"}</p>
-                        <p className="text-gray-500">BHK: {project.bhk}</p>
-                        <p className="text-gray-500">Project Size: {project.projectSize} sq. ft.</p>
+                        <p className="text-gray-500">BHK: {project.bhk.map((item) => (
+                            <>{item.bhk} , </>
+                        ))}</p>
+                        <p className="text-gray-500">Project Size: {project.projectSize.map((item) => (
+                            <>{item.size} sq.ft. , </>
+                        ))}</p>
                         <p className="text-gray-500">Possession Status: {project.possessionStatus}</p>
                         <p className="text-gray-500">Available Plot: {project.AvailablePlot}</p>
                         <p className="text-gray-500">Featured: {project.isFeatured ? "Yes" : "No"}</p>

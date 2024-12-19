@@ -12,6 +12,7 @@ import Image from "next/image";
 export default function Page({ params }) {
     const id = params.id;
     const router = useRouter();
+    const [data, setdata] = useState([]);
 
     // State to store form data
     const [formData, setFormData] = useState({
@@ -26,6 +27,20 @@ export default function Page({ params }) {
     const [loading, setLoading] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
+    useEffect(() => {
+        const alldata = async () => {
+            try {
+                const response = await axios.get('/api/projects/fetchall/project');
+                setdata(response.data.data);
+            } catch (error) {
+                console.error('Error fetching data data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        alldata();
+    }, []);
     // Handle input change
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -121,7 +136,7 @@ export default function Page({ params }) {
 
             if (response.status === 200) {
                 toast.success("Category successfully updated!");
-               
+
                 // router.push("/admin/category");
             }
         } catch (err) {
@@ -132,6 +147,35 @@ export default function Page({ params }) {
         }
     };
 
+    const handleCategoryChange = async (itemId) => {
+        // Ensure that formData.category is an array, defaulting to an empty array if not
+        const updatedCategories = Array.isArray(formData.category) ? formData.category : [];
+    
+        // Toggle logic: Add item if not present, remove item if already included
+        const updatedCategoryList = updatedCategories.includes(itemId)
+            ? updatedCategories.filter((id) => id !== itemId) // Remove itemId
+            : [...updatedCategories, id]; // Add itemId
+    
+        // Update the state with the new category list
+        setFormData((prev) => ({ ...prev, category: updatedCategoryList }));
+    
+        try {
+            console.log("Updated categories:", updatedCategoryList);
+    
+            // Send the updated categories to the API
+            const response = await axios.patch("/api/projects/update", {
+                id: itemId,
+                category: updatedCategoryList,
+            });
+    
+            if (response.status === 200) {
+                toast.success("Category updated successfully!");
+            }
+        } catch (err) {
+            console.error("Failed to update category:", err);
+            toast.error("Failed to update category!");
+        }
+    };
     
 
     return (
@@ -152,10 +196,10 @@ export default function Page({ params }) {
                     <h1 className="text-lg font-bold">Edit Category</h1>
                 </div>
 
-                <form onSubmit={handleSubmit} className="px-5 py-3 space-y-3">
-                    <div className="grid grid-cols-12 gap-4">
+                <form onSubmit={handleSubmit} className="px-5 py-3 grid grid-cols-4 gap-4 space-y-3">
+                    <div className=" col-span-2">
                         {/* Title */}
-                        <div className="sm:col-span-6 col-span-12">
+                        <div>
                             <label htmlFor="title" className="block text-[12px] text-gray-700">
                                 Page Title
                             </label>
@@ -170,13 +214,14 @@ export default function Page({ params }) {
                         </div>
 
                         {/* Slug (Read-Only Field) */}
-                        <div className="sm:col-span-6 col-span-12">
+                        <div>
                             <label htmlFor="slug" className="block text-[12px] text-gray-700">
                                 Slug
                             </label>
                             <input
                                 type="text"
                                 name="slug"
+                                disabled
                                 value={formData.slug}
                                 onChange={handleChange}
                                 placeholder="Enter Page Slug"
@@ -185,9 +230,9 @@ export default function Page({ params }) {
                             />
                         </div>
 
-                        <div className="sm:col-span-6 col-span-12">
+                        <div>
                             <label htmlFor="seoTitle" className="block text-[12px] text-gray-700">
-                            Seo Title
+                                Seo Title
                             </label>
                             <input
                                 type="text"
@@ -199,9 +244,9 @@ export default function Page({ params }) {
                             />
                         </div>
 
-                        <div className="sm:col-span-6 col-span-12">
+                        <div>
                             <label htmlFor="seoDescription" className="block text-[12px] text-gray-700">
-                            Seo Description
+                                Seo Description
                             </label>
                             <input
                                 type="text"
@@ -221,8 +266,13 @@ export default function Page({ params }) {
 
                             {/* Show existing image if it exists */}
                             {formData.image && !formData.imageFile && (
-                                <div className="mb-3">
-                                    <Image src={formData.image} alt="Feature" width={100} height={100} className="h-48 w-48" />
+                                <div className="relative h-[100px] w-full mb-3">
+                                    <Image
+                                        src={formData.image}
+                                        alt="category image"
+                                        layout="fill"
+                                        objectFit="cover"
+                                    />
                                 </div>
                             )}
 
@@ -234,18 +284,61 @@ export default function Page({ params }) {
                                 className="block w-full px-2 py-2 text-gray-500 bg-white border border-gray-200 placeholder:text-gray-400 focus:border-[#29234b] focus:outline-none focus:ring-[#29234b] sm:text-sm"
                             />
                         </div>
-                    </div>
 
-                    {/* Submit button */}
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={!isFormValid || loading}
-                            className={`${!isFormValid || loading ? "bg-gray-400" : "bg-[#29234b]"
-                                } text-white w-full font-bold py-2 px-4 rounded-md`}
-                        >
-                            {loading ? "Submitting..." : "Update Category"}
-                        </button>
+
+                        {/* Submit button */}
+                        <div>
+                            <button
+                                type="submit"
+                                disabled={!isFormValid || loading}
+                                className={`${!isFormValid || loading ? "bg-gray-400" : "bg-[#29234b]"
+                                    } text-white w-full font-bold py-2 px-4 rounded-md`}
+                            >
+                                {loading ? "Submitting..." : "Update Category"}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="col-span-2">
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-600 font-sans">
+                            <thead className="bg-[#29234b] text-white uppercase">
+                                <tr>
+                                    <th scope="col" className="px-4 font-medium capitalize py-2">Title</th>
+                                    <th scope="col" className="px-4 font-medium capitalize py-2">Slug</th>
+                                    <th scope="col" className="px-4 font-medium capitalize py-2">Check</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((item) => (
+                                    <tr
+                                        key={item._id}
+                                        className={`border-b hover:bg-gray-100 odd:bg-gray-50 even:bg-gray-100 transition-colors duration-200`}
+                                    >
+
+                                        <td className="px-4 py-2 text-[12px]">
+                                            {item.title}
+                                        </td>
+
+                                        <td className="px-4 py-2 text-[12px]">
+                                            {item.slug}
+                                        </td>
+                                        <td className="px-4 py-2 text-[12px]">
+                                            <input
+                                                type="checkbox"
+                                                id={`category-${item._id}`}
+                                                name="category"
+                                                checked={item.category.includes(id)}
+                                                onChange={() => handleCategoryChange(item._id)}
+                                                className="mr-2"
+                                            />
+                                        </td>
+
+
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </form>
             </div>

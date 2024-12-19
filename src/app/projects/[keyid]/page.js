@@ -8,6 +8,8 @@ import ReadMore from "@/components/single/ReadMore";
 import { ArrowDownToLine } from "lucide-react";
 import ContactForm from "@/components/single/ContactForm";
 import ContactFormPdf from "@/components/single/CaontactFormpdf";
+
+
 function Modal({ isOpen, onClose, children }) {
     if (!isOpen) return null;
 
@@ -33,12 +35,17 @@ export default function SingleProject({ params }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [filteredImages, setFilteredImages] = useState([]);
+    const [selectedSize, setSelectedSize] = useState("");
+    const [selectedBhk, setSelectedBhk] = useState("");
 
     useEffect(() => {
         const fetchProjectData = async () => {
             try {
                 const response = await axios.get(`/api/projects/${keyid}`);
-                setProject(response.data.data);
+                const data = response.data.data;
+                setProject(data);
+                setFilteredImages(data.gallery); // Default images
             } catch (err) {
                 setError("Failed to fetch project data.");
             } finally {
@@ -48,6 +55,41 @@ export default function SingleProject({ params }) {
 
         fetchProjectData();
     }, [keyid]);
+
+    useEffect(() => {
+        if (project) {
+            let newImages = project.gallery;
+
+            // Apply size filter
+            if (selectedSize) {
+                const sizeObj = project.projectSize.find((size) => size.size === selectedSize);
+                if (sizeObj) {
+                    newImages = sizeObj.image;
+                } else {
+                    newImages = []; // No matching size
+                }
+            }
+
+            // Apply BHK filter on top of size filter
+            if (selectedBhk) {
+                const bhkObj = project.bhk.find((bhk) => bhk.bhk === selectedBhk);
+                if (bhkObj) {
+                    // Intersection of current images and BHK images
+                    newImages = newImages.filter((img) => bhkObj.image.includes(img));
+                } else {
+                    newImages = []; // No matching BHK
+                }
+            }
+
+            setFilteredImages(newImages);
+        }
+    }, [selectedSize, selectedBhk, project]);
+
+    const resetFilters = () => {
+        setSelectedSize("");
+        setSelectedBhk("");
+        if (project) setFilteredImages(project.gallery);
+    };
 
     if (loading) {
         return (
@@ -88,7 +130,47 @@ export default function SingleProject({ params }) {
                                 <span className="inline-block z-50 absolute top-6 text-xs -left-9 bg-red-500 py-1 text-white px-10 border-y transform -rotate-45">
                                     ✨Featured
                                 </span>
-                                <ImageGallery images={project.gallery} />
+                                <ImageGallery images={filteredImages} />
+                            </div>
+
+                            <div className="flex justify-end items-center">
+                                <div className="flex gap-4">
+                                    <div className="relative">
+                                        <select
+                                            className="block text-sm w-full px-1 py-0.5 rounded border border-t-0 bg-[#fff5e4] focus:outline-none"
+                                            value={selectedSize}
+                                            onChange={(e) => setSelectedSize(e.target.value)}
+                                        >
+                                            <option value="">All Size</option>
+                                            {project.projectSize.map((size) => (
+                                                <option key={size.size} value={size.size}>
+                                                    {size.size} Sq.ft
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="relative">
+                                        <select
+                                            className="block text-sm w-full px-1 py-0.5 rounded border border-t-0 bg-[#fff5e4] focus:outline-none"
+                                            value={selectedBhk}
+                                            onChange={(e) => setSelectedBhk(e.target.value)}
+                                        >
+                                            <option value="">All BHK</option>
+                                            {project.bhk.map((bhk) => (
+                                                <option key={bhk.bhk} value={bhk.bhk}>
+                                                    {bhk.bhk} BHK
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                {/* <button
+                                    onClick={resetFilters}
+                                    className="text-sm bg-red-500 text-white px-4 py-1 rounded"
+                                >
+                                    Reset
+                                </button> */}
                             </div>
 
                             <div className="py-5">
@@ -121,7 +203,7 @@ export default function SingleProject({ params }) {
                                 <h4 className="text-md font-bold text-center mb-4 uppercase">
                                     Get Best Offer on this Project
                                 </h4>
-                                <ContactForm  project={project.slug}/>
+                                <ContactForm project={project.slug} />
                             </div>
                         </div>
                     </div>
@@ -129,7 +211,7 @@ export default function SingleProject({ params }) {
             </section>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <div className=" h-96">
+                <div className="h-96">
                     <ContactFormPdf pdflink={project.pdf} />
                 </div>
             </Modal>

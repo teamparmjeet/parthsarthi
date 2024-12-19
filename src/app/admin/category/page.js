@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Search, Trash2, CirclePlus, Filter, X, Star, StarHalf } from "lucide-react";
+import { ArrowLeft, Edit, ArrowRight, Search, Trash2, CirclePlus, Filter, X, Star, StarHalf } from "lucide-react";
 import Link from 'next/link';
 
 export default function Page() {
@@ -124,6 +124,7 @@ export default function Page() {
 
                 {/* Desktop Filter Section */}
                 <div className="hidden lg:flex space-x-3">
+
                     <select
                         className="border px-3 py-2 focus:outline-none text-sm"
                         value={sortOrder}
