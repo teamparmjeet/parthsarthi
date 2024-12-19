@@ -126,22 +126,29 @@ export default function SingleProject({ params }) {
                 <div className="container max-w-[90%] mx-auto">
                     <div className="grid grid-cols-12 gap-8">
                         <div className="lg:col-span-8 col-span-12">
-                            <div className="relative overflow-hidden bg-[#fff5e4] rounded-lg">
+                            <div className="relative overflow-hidden bg-[#fff5e4] rounded-lg rounded-br-none">
                                 <span className="inline-block z-50 absolute top-6 text-xs -left-9 bg-red-500 py-1 text-white px-10 border-y transform -rotate-45">
                                     ✨Featured
                                 </span>
                                 <ImageGallery images={filteredImages} />
                             </div>
 
-                            <div className="flex justify-end items-center">
-                                <div className="flex gap-4">
-                                    <div className="relative">
+                            <div className="flex justify-end  items-center">
+                                <div className="flex gap-6 bg-[#fff5e4] p-2 rounded-b-lg shadow-md">
+
+                                    <div className="relative w-1/2">
+                                        <label className="block text-xs font-semibold text-gray-700 mb-1" htmlFor="size-select">
+                                            Select Size
+                                        </label>
                                         <select
-                                            className="block text-sm w-full px-1 py-0.5 rounded border border-t-0 bg-[#fff5e4] focus:outline-none"
+                                            id="size-select"
+                                            className="block w-full text-sm px-3 py-2 rounded border border-gray-300 bg-[#2d2849] text-white focus:outline-none "
                                             value={selectedSize}
                                             onChange={(e) => setSelectedSize(e.target.value)}
                                         >
-                                            <option value="">All Size</option>
+                                            <option value="" className="text-gray-400">
+                                                All Size
+                                            </option>
                                             {project.projectSize.map((size) => (
                                                 <option key={size.size} value={size.size}>
                                                     {size.size} Sq.ft
@@ -150,13 +157,20 @@ export default function SingleProject({ params }) {
                                         </select>
                                     </div>
 
-                                    <div className="relative">
+
+                                    <div className="relative w-1/2">
+                                        <label className="block text-xs font-semibold text-gray-700 mb-1" htmlFor="bhk-select">
+                                            Select BHK
+                                        </label>
                                         <select
-                                            className="block text-sm w-full px-1 py-0.5 rounded border border-t-0 bg-[#fff5e4] focus:outline-none"
+                                            id="bhk-select"
+                                            className="block w-full text-sm px-3 py-2 rounded border border-gray-300 bg-[#2d2849] text-white focus:outline-none "
                                             value={selectedBhk}
                                             onChange={(e) => setSelectedBhk(e.target.value)}
                                         >
-                                            <option value="">All BHK</option>
+                                            <option value="" className="text-gray-400">
+                                                All BHK
+                                            </option>
                                             {project.bhk.map((bhk) => (
                                                 <option key={bhk.bhk} value={bhk.bhk}>
                                                     {bhk.bhk} BHK
@@ -165,6 +179,7 @@ export default function SingleProject({ params }) {
                                         </select>
                                     </div>
                                 </div>
+
                                 {/* <button
                                     onClick={resetFilters}
                                     className="text-sm bg-red-500 text-white px-4 py-1 rounded"
@@ -203,7 +218,7 @@ export default function SingleProject({ params }) {
                                 <h4 className="text-md font-bold text-center mb-4 uppercase">
                                     Get Best Offer on this Project
                                 </h4>
-                                <ContactForm project={project.slug} />
+                                <ContactForm project={project.slug} bhk={selectedBhk} size={selectedSize} />
                             </div>
                         </div>
                     </div>

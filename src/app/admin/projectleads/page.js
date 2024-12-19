@@ -127,6 +127,7 @@ export default function Contact() {
                             <th scope="col" className="px-4 font-medium capitalize py-2"> Email</th>
                             <th scope="col" className="px-4 font-medium capitalize py-2">Address</th>
                             <th scope="col" className="px-4 font-medium capitalize py-2"> Project</th>
+                            <th scope="col" className="px-4 font-medium capitalize py-2"> Enquiry For</th>
 
                         </tr>
                     </thead>
@@ -164,7 +165,23 @@ export default function Contact() {
                                             {contact.project} <span className=" underline text-blue-600">View Project</span>
                                         </Link>
                                     </td>
-
+                                    <td className="px-4 py-2 text-[12px] flex">
+                                        {(!contact.size || !contact.bhk) && (
+                                            <div className="px-3 py-1 ">
+                                                All
+                                            </div>
+                                        )}
+                                        {contact.size && (
+                                            <div className="px-3 py-1 ">
+                                                {contact.size} Sq.ft
+                                            </div>
+                                        )}
+                                        {contact.bhk && (
+                                            <div className="px-3 py-1 ">
+                                                {contact.bhk} BHK
+                                            </div>
+                                        )}
+                                    </td>
                                 </tr>
                             ))
                         ) : (

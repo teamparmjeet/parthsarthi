@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-const ContactForm = ({ project }) => {
+const ContactForm = ({ project, bhk = "", size = "" }) => {
   const [formData, setFormData] = useState({
     project: project,
+    bhk: bhk,
+    size: size,
     fullName: "",
     email: "",
     phone: "",
@@ -16,10 +18,23 @@ const ContactForm = ({ project }) => {
 
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
 
-  // Check if all form fields are filled and terms are accepted
   useEffect(() => {
-    const allFieldsFilled = Object.values(formData).every((value) => value !== "");
-    setIsSubmitEnabled(allFieldsFilled && formData.terms);
+    setFormData((prev) => ({
+      ...prev,
+      project,
+      bhk,
+      size,
+    }));
+  }, [project, bhk, size]);
+
+  useEffect(() => {
+    setIsSubmitEnabled(
+      !!formData.project &&
+      !!formData.fullName &&
+      !!formData.email &&
+      !!formData.phone &&
+      !!formData.address
+    );
   }, [formData]);
 
   const handleChange = (e) => {
@@ -32,17 +47,18 @@ const ContactForm = ({ project }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      // Submit form data to the API
-      const response = await axios.post('/api/Lead/create', formData);
+      console.log("Form Data:", formData); // Debugging
+      const response = await axios.post("/api/Lead/create", formData);
       if (response.data.success) {
-        toast.success("Contact Request Send Successfully")
-        setFormData({
+        toast.success("Contact Request Sent Successfully");
+       setFormData({
           fullName: "",
           email: "",
           phone: "",
           address: "",
+          bhk: "",
+          size: "",
           terms: false,
         })
       } else {
@@ -136,13 +152,31 @@ const ContactForm = ({ project }) => {
         </label>
       </div>
 
+      <div className="flex flex-wrap items-center gap-4 text-sm ">
+        {(size || bhk) && (
+          <div className="font-medium text-gray-700">
+            Enquiry for:
+          </div>
+        )}
+        {size && (
+          <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-md">
+            {size} Sq.ft
+          </div>
+        )}
+        {bhk && (
+          <div className="px-3 py-1 bg-green-100 text-green-700 rounded-md">
+            {bhk} BHK
+          </div>
+        )}
+      </div>
+
       {/* Terms and Conditions */}
       <div className="flex items-center mb-3">
         <input
           id="terms"
           type="checkbox"
           name="terms"
-          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
           checked={formData.terms}
           onChange={handleChange}
           required
@@ -158,7 +192,7 @@ const ContactForm = ({ project }) => {
         className={`flex w-full text-center justify-center py-5 px-10 rounded-full items-center 
     bg-gradient-to-r from-[#DAB221] to-[#B07C0A] text-white font-semibold my-3 leading-3 group transition 
     ${!isSubmitEnabled ? 'bg-gray-400 cursor-not-allowed' : 'hover:opacity-90 active:opacity-80'}`}
-        disabled={!isSubmitEnabled}
+      // disabled={!isSubmitEnabled}
       >
         Connect Now
       </button>

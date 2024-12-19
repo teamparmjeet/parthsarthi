@@ -2,9 +2,16 @@ import mongoose, { Schema } from "mongoose";
 
 const LeadSchema = new Schema(
     {
-        project:{
+        project: {
             type: String,
             required: true
+        },
+        bhk: {
+            type: String,
+        },
+
+        size: {
+            type: String,
         },
         fullName: {
             type: String,
@@ -26,7 +33,7 @@ const LeadSchema = new Schema(
             type: Boolean,
             required: true,
         },
-       
+
         defaultValue: {
             type: String,
             default: "lead"
@@ -35,6 +42,6 @@ const LeadSchema = new Schema(
     { timestamps: true }
 )
 
-const LeadModel = mongoose.models.Lead || mongoose.model("Lead", LeadSchema);
+const LeadModel = mongoose.models.Lead2 || mongoose.model("Lead2", LeadSchema);
 
 export default LeadModel;

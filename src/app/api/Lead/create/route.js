@@ -7,10 +7,10 @@ export async function POST(req) {
 
     try {
 
-        const { project, fullName, email, phone, address, terms } = await req.json();
+        const { bhk, size, project, fullName, email, phone, address, terms } = await req.json();
 
         const LeadCreate = await LeadModel.create(
-            { project, fullName, email, phone, address, terms }
+            { bhk, size, project, fullName, email, phone, address, terms }
         )
 
         return Response.json(
