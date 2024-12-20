@@ -6,7 +6,6 @@ import toast, { Toaster } from "react-hot-toast";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
-
     fullName: "",
     email: "",
     phone: "",
@@ -14,13 +13,21 @@ const ContactForm = () => {
     terms: false,
   });
 
+  const [otp, setOtp] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
 
-  // Check if all form fields are filled and terms are accepted
+  // Enable submit only when all fields are valid, terms are accepted, and OTP is verified
   useEffect(() => {
-    const allFieldsFilled = Object.values(formData).every((value) => value !== "");
-    setIsSubmitEnabled(allFieldsFilled && formData.terms);
-  }, [formData]);
+    const allFieldsFilled =
+      formData.fullName &&
+      formData.email &&
+      formData.phone &&
+      formData.address &&
+      formData.terms;
+    setIsSubmitEnabled(allFieldsFilled && isOtpVerified);
+  }, [formData, isOtpVerified]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -30,39 +37,77 @@ const ContactForm = () => {
     });
   };
 
+  const sendOtp = async () => {
+    try {
+      const response = await axios.post("/api/contact/otp", { email: formData.email });
+      if (response.data.success) {
+        toast.success("OTP sent to your email.");
+        setIsOtpSent(true);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error sending OTP.");
+      console.error("Error sending OTP:", error);
+    }
+  };
+
+  const verifyOtp = async () => {
+    try {
+      const response = await axios.post("/api/contact/otp", {
+        email: formData.email,
+        otp,
+      });
+      if (response.data.success) {
+        toast.success("OTP verified.");
+        setIsOtpVerified(true);
+        setIsOtpSent(false); // Clear OTP UI after successful verification
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error verifying OTP.");
+      console.error("Error verifying OTP:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Submit form data to the API
-      const response = await axios.post('/api/contact/create', formData);
+      const response = await axios.post("/api/contact/create", formData);
       if (response.data.success) {
-        toast.success("Contact Request Send Successfully")
+        toast.success("Contact Request Sent Successfully");
         setFormData({
           fullName: "",
           email: "",
           phone: "",
           address: "",
           terms: false,
-        })
+        });
+        setOtp("");
+        setIsOtpSent(false);
+        setIsOtpVerified(false);
       } else {
-        alert(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error submitting the form", error);
-      alert("An error occurred while submitting the form.");
+      toast.error("Error submitting the form.");
+      console.error("Error submitting the form:", error);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      {/* Full Name */} <Toaster />
+      <Toaster />
+
+      {/* Full Name */}
       <div className="relative z-0 w-full mb-4 group">
         <input
           type="text"
           name="fullName"
           id="fullName"
-          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 focus:outline-none focus:ring-0 focus:border-[#CC9B18] peer"
           placeholder=" "
           value={formData.fullName}
           onChange={handleChange}
@@ -70,19 +115,19 @@ const ContactForm = () => {
         />
         <label
           htmlFor="fullName"
-          className="peer-focus:font-medium absolute mx-1 px-1 text-sm bg-white text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          className="peer-focus:font-medium absolute mx-1 px-1 text-sm bg-white text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-[#CC9B18] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Full Name
         </label>
       </div>
 
-      {/* Email ID */}
+      {/* Email */}
       <div className="relative z-0 w-full mb-4 group">
         <input
           type="email"
           name="email"
           id="email"
-          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 focus:outline-none focus:ring-0 focus:border-[#CC9B18] peer"
           placeholder=" "
           value={formData.email}
           onChange={handleChange}
@@ -90,19 +135,51 @@ const ContactForm = () => {
         />
         <label
           htmlFor="email"
-          className="peer-focus:font-medium absolute text-sm bg-white mx-1 px-1 text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          className="peer-focus:font-medium absolute mx-1 px-1 text-sm bg-white text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-[#CC9B18] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
-          Email ID
+          Email
         </label>
+        {!isOtpVerified && (
+          <button
+            type="button"
+            onClick={sendOtp}
+            className="mt-2 text-[#CC9B18] text-sm hover:underline"
+          >
+            Send OTP
+          </button>
+        )}
       </div>
 
-      {/* Phone No. */}
+      {/* OTP Verification */}
+      {isOtpSent && !isOtpVerified && (
+        <div className="relative z-0 w-full mb-4 group">
+          <input
+            type="text"
+            name="otp"
+            id="otp"
+            className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 focus:outline-none focus:ring-0 focus:border-[#CC9B18] peer"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            onClick={verifyOtp}
+            className="mt-2 text-[#CC9B18] text-sm hover:underline"
+          >
+            Verify OTP
+          </button>
+        </div>
+      )}
+
+      {/* Phone */}
       <div className="relative z-0 w-full mb-4 group">
         <input
           type="tel"
           name="phone"
           id="phone"
-          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 focus:outline-none focus:ring-0 focus:border-[#CC9B18] peer"
           placeholder=" "
           value={formData.phone}
           onChange={handleChange}
@@ -110,19 +187,17 @@ const ContactForm = () => {
         />
         <label
           htmlFor="phone"
-          className="peer-focus:font-medium absolute text-sm bg-white mx-1 px-1 text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          className="peer-focus:font-medium absolute mx-1 px-1 text-sm bg-white text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-[#CC9B18] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
-          Phone No.
+          Phone
         </label>
       </div>
-
-      {/* Address */}
       <div className="relative z-0 w-full mb-4 group">
         <input
           type="text"
           name="address"
           id="address"
-          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          className="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#CC9B18] peer"
           placeholder=" "
           value={formData.address}
           onChange={handleChange}
@@ -130,24 +205,22 @@ const ContactForm = () => {
         />
         <label
           htmlFor="address"
-          className="peer-focus:font-medium absolute bg-white mx-1 px-1 text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          className="peer-focus:font-medium absolute bg-white mx-1 px-1 text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-[#CC9B18] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Address
         </label>
       </div>
-
       {/* Terms and Conditions */}
-      <div className="flex items-center mb-3">
+      <div className="relative z-0 w-full mb-4 group">
         <input
-          id="terms"
           type="checkbox"
           name="terms"
-          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          id="terms"
+          className="mr-2"
           checked={formData.terms}
           onChange={handleChange}
-          required
         />
-        <label htmlFor="terms" className="ml-2 text-xs text-gray-900">
+        <label htmlFor="terms" className="text-sm text-gray-600">
           I agree to the Terms and Conditions
         </label>
       </div>
@@ -155,14 +228,11 @@ const ContactForm = () => {
       {/* Submit Button */}
       <button
         type="submit"
-        className={`flex w-full text-center justify-center py-5 px-10 rounded-full items-center 
-    bg-gradient-to-r from-[#DAB221] to-[#B07C0A] text-white font-semibold my-3 leading-3 group transition 
-    ${!isSubmitEnabled ? 'bg-gray-400 cursor-not-allowed' : 'hover:opacity-90 active:opacity-80'}`}
+        className={`w-full py-2.5 px-4 bg-[#CC9B18] text-white text-sm font-medium rounded-md focus:outline-none ${isSubmitEnabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
         disabled={!isSubmitEnabled}
       >
-        Connect Now
+        Submit
       </button>
-
     </form>
   );
 };
