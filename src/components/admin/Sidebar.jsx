@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   Menu, X, Home, CopyPlus, ListTodo, Rocket, Gauge, User2Icon, UserPlus2, LayoutDashboard, MapPinHouse, MapPinPlus, Users, LayoutList, Group, Trash2, List, Users2, UserPlus,
   User,
+  GitPullRequest,
   CheckSquare,
   Book,
   Calendar,
@@ -70,7 +71,7 @@ export default function Sidebar({ onToggleSidebar }) {
             } transition-transform bottom-0 absolute border bg-white duration-300 ease-in-out`}
         >
           <div className="relative h-full flex flex-col px-2">
-            <ul className="h-full ">
+            <ul className=" overflow-auto h-5/6 ">
               <Link href="/admin/dashboard">
                 <li
                   className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/dashboard") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700 "
@@ -196,6 +197,24 @@ export default function Sidebar({ onToggleSidebar }) {
                 >
                   <NotebookText size={18} />
                   Offer                </li>
+              </Link>
+
+              <Link href="/admin/Job">
+                <li
+                  className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/Offer") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                >
+                  <GitPullRequest size={18} />
+                  Job Enquiry                </li>
+              </Link>
+
+              <Link href="/admin/Jobcategory">
+                <li
+                  className={`cursor-pointer text-sm px-4 py-3 duration-150 flex items-center gap-x-2 rounded-md ${isActiveLink("/admin/Offer") ? "bg-[#2d2849] text-white" : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                >
+                  <GitPullRequest size={18} />
+                  Job Category                </li>
               </Link>
 
             </ul>
