@@ -41,8 +41,8 @@ export const POST = async (req) => {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Your OTP Code",
-      text: `Your OTP is ${generatedOtp}. It is valid for 5 minutes.`,
+      subject: "Parth sarthi Verification",
+      text: `Your One-Time Password (OTP) is ${generatedOtp}. Please use this code within the next 5 minutes to complete your verification process.`,
     });
 
     return new Response(JSON.stringify({ success: true, message: "OTP sent to email." }), {
