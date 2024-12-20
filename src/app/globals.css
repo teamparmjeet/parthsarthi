@@ -109,3 +109,22 @@ body {
   background-size: cover;
   background-attachment: fixed;
 }
+
+.image-container {
+  perspective: 1000px;
+  /* Perspective for the 3D effect */
+  width: auto;
+  height: auto;
+  display: flex;
+  overflow: hidden;
+
+}
+
+.image {
+  transition: transform 0.1s ease-out;
+  /* Smooth rotation effect */
+  transform-origin: center;
+  /* Rotation origin */
+  will-change: transform;
+  /* Performance optimization */
+}
